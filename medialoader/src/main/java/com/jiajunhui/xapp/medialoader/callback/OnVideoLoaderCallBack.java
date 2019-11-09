@@ -12,11 +12,11 @@ import com.jiajunhui.xapp.medialoader.bean.VideoResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.provider.BaseColumns._ID;
-import static android.provider.MediaStore.MediaColumns.DATA;
-import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
-import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
-import static android.provider.MediaStore.MediaColumns.SIZE;
+import static android.provider.MediaStore.Video.VideoColumns._ID;
+import static android.provider.MediaStore.Video.VideoColumns.DATA;
+import static android.provider.MediaStore.Video.VideoColumns.DATE_MODIFIED;
+import static android.provider.MediaStore.Video.VideoColumns.DISPLAY_NAME;
+import static android.provider.MediaStore.Video.VideoColumns.SIZE;
 import static android.provider.MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Video.VideoColumns.BUCKET_ID;
 import static android.provider.MediaStore.Video.VideoColumns.DURATION;
@@ -37,7 +37,7 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
         while (data.moveToNext()) {
             String folderId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
             String folderName = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
-            int videoId = data.getInt(data.getColumnIndexOrThrow(_ID));
+            long videoId = data.getLong(data.getColumnIndexOrThrow(_ID));
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
@@ -68,7 +68,7 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
                 MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Video.Media.DISPLAY_NAME,
                 MediaStore.Video.Media.DURATION,
-                MediaStore.MediaColumns.SIZE,
+                MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.DATE_MODIFIED
         };
         return PROJECTION;

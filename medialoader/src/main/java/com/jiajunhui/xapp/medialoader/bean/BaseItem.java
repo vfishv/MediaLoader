@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Created by Taurus on 16/8/28.
  */
 public class BaseItem implements Serializable {
-    private int id;
+    private long id;
     private String displayName;
     private String path;
     private long size;
@@ -31,15 +31,15 @@ public class BaseItem implements Serializable {
     public BaseItem() {
     }
 
-    public BaseItem(int id, String displayName, String path) {
+    public BaseItem(long id, String displayName, String path) {
         this(id, displayName, path, 0);
     }
 
-    public BaseItem(int id, String displayName, String path, long size) {
+    public BaseItem(long id, String displayName, String path, long size) {
         this(id, displayName, path, size, 0);
     }
 
-    public BaseItem(int id, String displayName, String path, long size, long modified) {
+    public BaseItem(long id, String displayName, String path, long size, long modified) {
         this.id = id;
         this.displayName = displayName;
         this.path = path;
@@ -47,11 +47,11 @@ public class BaseItem implements Serializable {
         this.modified = modified;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

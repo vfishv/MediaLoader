@@ -28,7 +28,7 @@ public class VideoItem extends BaseItem {
     public VideoItem() {
     }
 
-    public VideoItem(int id, String displayName, String path, long size, long modified, long duration) {
+    public VideoItem(long id, String displayName, String path, long size, long modified, long duration) {
         super(id, displayName, path, size, modified);
         this.duration = duration;
     }

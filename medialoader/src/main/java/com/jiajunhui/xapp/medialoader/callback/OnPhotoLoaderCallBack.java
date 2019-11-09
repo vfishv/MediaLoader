@@ -12,13 +12,13 @@ import com.jiajunhui.xapp.medialoader.bean.PhotoResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.provider.BaseColumns._ID;
+import static android.provider.MediaStore.Images.ImageColumns._ID;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_ID;
-import static android.provider.MediaStore.MediaColumns.DATA;
-import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
-import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
-import static android.provider.MediaStore.MediaColumns.SIZE;
+import static android.provider.MediaStore.Images.ImageColumns.DATA;
+import static android.provider.MediaStore.Images.ImageColumns.DATE_MODIFIED;
+import static android.provider.MediaStore.Images.ImageColumns.DISPLAY_NAME;
+import static android.provider.MediaStore.Images.ImageColumns.SIZE;
 
 /**
  * Created by Taurus on 2017/5/23.
@@ -40,7 +40,7 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
         while (data.moveToNext()) {
             String folderId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
             String folderName = data.getString(data.getColumnIndexOrThrow(BUCKET_DISPLAY_NAME));
-            int imageId = data.getInt(data.getColumnIndexOrThrow(_ID));
+            long imageId = data.getLong(data.getColumnIndexOrThrow(_ID));
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));

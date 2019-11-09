@@ -27,15 +27,15 @@ public class PhotoItem extends BaseItem {
     public PhotoItem() {
     }
 
-    public PhotoItem(int id, String displayName, String path) {
+    public PhotoItem(long id, String displayName, String path) {
         super(id, displayName, path);
     }
 
-    public PhotoItem(int id, String displayName, String path, long size) {
+    public PhotoItem(long id, String displayName, String path, long size) {
         super(id, displayName, path, size);
     }
 
-    public PhotoItem(int id, String displayName, String path, long size, long modified) {
+    public PhotoItem(long id, String displayName, String path, long size, long modified) {
         super(id, displayName, path, size, modified);
     }
 
