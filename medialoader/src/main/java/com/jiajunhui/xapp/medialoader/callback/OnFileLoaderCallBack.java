@@ -3,7 +3,7 @@ package com.jiajunhui.xapp.medialoader.callback;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.support.v4.content.Loader;
+import androidx.loader.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.FileItem;
 import com.jiajunhui.xapp.medialoader.bean.FileProperty;

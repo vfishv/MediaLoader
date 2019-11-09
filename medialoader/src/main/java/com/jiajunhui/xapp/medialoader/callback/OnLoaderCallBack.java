@@ -1,7 +1,7 @@
 package com.jiajunhui.xapp.medialoader.callback;
 
 import android.database.Cursor;
-import android.support.v4.content.Loader;
+import androidx.loader.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.inter.ILoader;
 

@@ -4,8 +4,8 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.Loader;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 
