@@ -25,6 +25,8 @@ public class VideoItem extends BaseItem {
     private long duration;
     private boolean checked;
 
+    private long mini_thumb_magic;
+
     public VideoItem() {
     }
 
@@ -47,5 +49,13 @@ public class VideoItem extends BaseItem {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public long getMini_thumb_magic() {
+        return mini_thumb_magic;
+    }
+
+    public void setMini_thumb_magic(long mini_thumb_magic) {
+        this.mini_thumb_magic = mini_thumb_magic;
     }
 }

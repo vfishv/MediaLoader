@@ -20,6 +20,7 @@ import static android.provider.MediaStore.Video.VideoColumns.SIZE;
 import static android.provider.MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Video.VideoColumns.BUCKET_ID;
 import static android.provider.MediaStore.Video.VideoColumns.DURATION;
+import static android.provider.MediaStore.Video.VideoColumns.MINI_THUMB_MAGIC;
 
 /**
  * Created by Taurus on 2017/5/23.
@@ -43,7 +44,9 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
+            long thumb = data.getLong(data.getColumnIndexOrThrow(MINI_THUMB_MAGIC));
             item = new VideoItem(videoId,name,path,size,modified,duration);
+            item.setMini_thumb_magic(thumb);
             folder = new VideoFolder();
             folder.setId(folderId);
             folder.setName(folderName);
@@ -67,6 +70,7 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
                 MediaStore.Video.Media.BUCKET_ID,
                 MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Video.Media.DISPLAY_NAME,
+                MediaStore.Video.Media.MINI_THUMB_MAGIC,
                 MediaStore.Video.Media.DURATION,
                 MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.DATE_MODIFIED

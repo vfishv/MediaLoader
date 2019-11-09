@@ -19,6 +19,7 @@ import static android.provider.MediaStore.Images.ImageColumns.DATA;
 import static android.provider.MediaStore.Images.ImageColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.Images.ImageColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.SIZE;
+import static android.provider.MediaStore.Images.ImageColumns.MINI_THUMB_MAGIC;
 
 /**
  * Created by Taurus on 2017/5/23.
@@ -45,10 +46,12 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
+            long thumb = data.getLong(data.getColumnIndexOrThrow(MINI_THUMB_MAGIC));
             folder = new PhotoFolder();
             folder.setId(folderId);
             folder.setName(folderName);
             item = new PhotoItem(imageId,name,path,size,modified);
+            item.setMini_thumb_magic(thumb);
             if(folders.contains(folder)){
                 folders.get(folders.indexOf(folder)).addItem(item);
             }else{
@@ -70,6 +73,7 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.MINI_THUMB_MAGIC,
                 MediaStore.Images.Media.SIZE,
                 MediaStore.Images.Media.DATE_MODIFIED
         };
