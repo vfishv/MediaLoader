@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.jfrog.bintray'
 
 // 这个version是区分library版本的，因此当我们需要更新library时记得修改这个version
 version = "1.2.1"
@@ -35,6 +35,7 @@ dependencies {
 def siteUrl = 'https://github.com/jiajunhui/MediaLoader'      // 项目的主页
 def gitUrl = 'https://github.com/jiajunhui/MediaLoader.git'   // Git仓库的url
 group = "com.jiajunhui.xapp.medialoader" // Maven Group ID for the artifact，一般填你唯一的包名
+/*
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
@@ -68,6 +69,7 @@ install {
         }
     }
 }
+*/
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -88,6 +90,7 @@ artifacts {
 Properties properties = new Properties()
 // 加载本地配置
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
+/*
 bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
@@ -101,3 +104,4 @@ bintray {
         publish = true
     }
 }
+*/
