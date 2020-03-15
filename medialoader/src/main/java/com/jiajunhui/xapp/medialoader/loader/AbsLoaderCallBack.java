@@ -58,7 +58,8 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
             if(context!=null){
                 Context ctx = this.context.get();
                 if(ctx!=null){
-                    ((FragmentActivity)ctx).getSupportLoaderManager().destroyLoader(mLoaderId);
+                    LoaderManager.getInstance((FragmentActivity) ctx).destroyLoader(mLoaderId);
+                    //((FragmentActivity)ctx).getSupportLoaderManager().destroyLoader(mLoaderId);
                 }
             }
         }catch (Exception e){

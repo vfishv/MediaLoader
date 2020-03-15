@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
@@ -89,7 +90,8 @@ public class MediaLoader {
     }
 
     private void loadMedia(FragmentActivity activity, AbsLoaderCallBack absLoaderCallBack){
-        activity.getSupportLoaderManager().restartLoader(checkIds(activity),null,absLoaderCallBack);
+        LoaderManager.getInstance(activity).restartLoader(checkIds(activity),null,absLoaderCallBack);
+        //activity.getSupportLoaderManager().restartLoader(checkIds(activity),null,absLoaderCallBack);
     }
 
     private synchronized void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
