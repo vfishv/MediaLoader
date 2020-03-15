@@ -14,6 +14,7 @@ import java.util.List;
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.MediaColumns.DATA;
+import static android.provider.MediaStore.MediaColumns.MIME_TYPE;
 import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.MediaColumns.SIZE;
@@ -34,6 +35,7 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
             int audioId = data.getInt(data.getColumnIndexOrThrow(_ID));
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
+            String mimeType = data.getString(data.getColumnIndex(MIME_TYPE));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
@@ -43,6 +45,7 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
             item.setDuration(duration);
             item.setSize(size);
             item.setModified(modified);
+            item.setMimeType(mimeType);
             result.add(item);
             sum_size += size;
         }
@@ -59,6 +62,7 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
         String[] PROJECTION = {
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.MIME_TYPE,
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.DURATION,
                 MediaStore.MediaColumns.SIZE,

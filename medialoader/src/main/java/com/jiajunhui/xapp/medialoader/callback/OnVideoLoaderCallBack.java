@@ -14,6 +14,7 @@ import java.util.List;
 
 import static android.provider.MediaStore.Video.VideoColumns._ID;
 import static android.provider.MediaStore.Video.VideoColumns.DATA;
+import static android.provider.MediaStore.Video.VideoColumns.MIME_TYPE;
 import static android.provider.MediaStore.Video.VideoColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.Video.VideoColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.Video.VideoColumns.SIZE;
@@ -41,12 +42,14 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
             long videoId = data.getLong(data.getColumnIndexOrThrow(_ID));
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
+            String mimeType = data.getString(data.getColumnIndex(MIME_TYPE));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
             long thumb = data.getLong(data.getColumnIndexOrThrow(MINI_THUMB_MAGIC));
             item = new VideoItem(videoId,name,path,size,modified,duration);
             item.setMini_thumb_magic(thumb);
+            item.setMimeType(mimeType);
             folder = new VideoFolder();
             folder.setId(folderId);
             folder.setName(folderName);
@@ -67,6 +70,7 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
         String[] PROJECTION = {
                 MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA,
+                MediaStore.Video.Media.MIME_TYPE,
                 MediaStore.Video.Media.BUCKET_ID,
                 MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Video.Media.DISPLAY_NAME,

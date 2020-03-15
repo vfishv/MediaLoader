@@ -16,6 +16,7 @@ import static android.provider.MediaStore.Images.ImageColumns._ID;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_ID;
 import static android.provider.MediaStore.Images.ImageColumns.DATA;
+import static android.provider.MediaStore.Images.ImageColumns.MIME_TYPE;
 import static android.provider.MediaStore.Images.ImageColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.Images.ImageColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.SIZE;
@@ -45,6 +46,7 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
+            String mimeType = data.getString(data.getColumnIndex(MIME_TYPE));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
             long thumb = data.getLong(data.getColumnIndexOrThrow(MINI_THUMB_MAGIC));
             folder = new PhotoFolder();
@@ -52,6 +54,7 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
             folder.setName(folderName);
             item = new PhotoItem(imageId,name,path,size,modified);
             item.setMini_thumb_magic(thumb);
+            item.setMimeType(mimeType);
             if(folders.contains(folder)){
                 folders.get(folders.indexOf(folder)).addItem(item);
             }else{
@@ -70,6 +73,7 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
         String[] PROJECTION = {
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.MIME_TYPE,
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DISPLAY_NAME,

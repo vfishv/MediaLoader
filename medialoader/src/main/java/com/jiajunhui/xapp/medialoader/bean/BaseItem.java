@@ -25,6 +25,7 @@ public class BaseItem implements Serializable {
     private long id;
     private String displayName;
     private String path;
+    private String mimeType;
     private long size;
     private long modified;
 
@@ -69,6 +70,14 @@ public class BaseItem implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public long getSize() {
