@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 //apply plugin: 'com.github.dcendents.android-maven'
 //apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.vanniktech.maven.publish'
@@ -7,7 +8,7 @@ apply plugin: 'com.vanniktech.maven.publish'
 version = "1.2.1"
 
 android {
-    compileSdkVersion 35
+    compileSdk 35
     namespace 'com.jiajunhui.xapp.medialoader'
 
     defaultConfig {
@@ -23,6 +24,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
     lintOptions{
         abortOnError false
     }
@@ -32,6 +38,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.13.2'
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
 }
 /*
 def siteUrl = 'https://github.com/jiajunhui/MediaLoader'      // 项目的主页
