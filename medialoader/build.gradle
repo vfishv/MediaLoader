@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.vanniktech.maven.publish'
 
 // 这个version是区分library版本的，因此当我们需要更新library时记得修改这个version
 version = "1.2.1"
@@ -32,7 +33,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
-
+/*
 def siteUrl = 'https://github.com/jiajunhui/MediaLoader'      // 项目的主页
 def gitUrl = 'https://github.com/jiajunhui/MediaLoader.git'   // Git仓库的url
 group = "com.jiajunhui.xapp.medialoader" // Maven Group ID for the artifact，一般填你唯一的包名
@@ -102,3 +103,4 @@ bintray {
         publish = true
     }
 }
+*/
