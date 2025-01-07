@@ -2,8 +2,9 @@ package com.jiajunhui.xapp.medialoader.callback;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.Loader;
+import androidx.loader.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.AudioItem;
 import com.jiajunhui.xapp.medialoader.bean.AudioResult;
@@ -11,16 +12,7 @@ import com.jiajunhui.xapp.medialoader.bean.AudioResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.provider.BaseColumns._ID;
-import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
-import static android.provider.MediaStore.MediaColumns.DATA;
-import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
-import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
-import static android.provider.MediaStore.MediaColumns.SIZE;
-
-/**
- * Created by Taurus on 2017/5/23.
- */
+import static android.provider.MediaStore.Audio.AudioColumns;
 
 public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResult> {
 
@@ -29,20 +21,30 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
         List<AudioItem> result = new ArrayList<>();
         AudioItem item;
         long sum_size = 0;
-        while (data.moveToNext()) {
+        while (data!=null && data.moveToNext()) {
             item = new AudioItem();
-            int audioId = data.getInt(data.getColumnIndexOrThrow(_ID));
-            String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
-            String path = data.getString(data.getColumnIndexOrThrow(DATA));
-            long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
-            long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
-            long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
+            int audioId = data.getInt(data.getColumnIndexOrThrow(AudioColumns._ID));
+            String name = data.getString(data.getColumnIndexOrThrow(AudioColumns.DISPLAY_NAME));
+            String path = data.getString(data.getColumnIndexOrThrow(AudioColumns.DATA));
+            String mimeType = data.getString(data.getColumnIndexOrThrow(AudioColumns.MIME_TYPE));
+            long duration = data.getLong(data.getColumnIndexOrThrow(AudioColumns.DURATION));
+            long size = data.getLong(data.getColumnIndexOrThrow(AudioColumns.SIZE));
+            long album_id = data.getLong(data.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
+            long modified = data.getLong(data.getColumnIndexOrThrow(AudioColumns.DATE_MODIFIED));
             item.setId(audioId);
             item.setDisplayName(name);
             item.setPath(path);
             item.setDuration(duration);
             item.setSize(size);
             item.setModified(modified);
+            item.setAlbumId(album_id);
+            item.setMimeType(mimeType);
+            if (supportR()) {
+                int is_trashed = data.getInt(data.getColumnIndexOrThrow(AudioColumns.IS_TRASHED));
+                int is_favorite = data.getInt(data.getColumnIndexOrThrow(AudioColumns.IS_FAVORITE));
+                item.setTrashed(is_trashed == 1);
+                item.setFavorite(is_favorite == 1);
+            }
             result.add(item);
             sum_size += size;
         }
@@ -51,19 +53,41 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
 
     @Override
     public Uri getQueryUri() {
-        return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri collection;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        } else {
+            collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        }
+        return collection;
+        //return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     }
 
     @Override
     public String[] getSelectProjection() {
-        String[] PROJECTION = {
+        if (supportR()) {
+        return new String[]{
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.MIME_TYPE,
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.DURATION,
-                MediaStore.MediaColumns.SIZE,
+                MediaStore.Audio.Media.SIZE,
+                MediaStore.Audio.Media.ALBUM_ID,
+                MediaStore.Audio.Media.DATE_MODIFIED,
+                MediaStore.Audio.Media.IS_TRASHED,
+                MediaStore.Audio.Media.IS_FAVORITE
+        };
+        }
+        return new String[]{
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.MIME_TYPE,
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.SIZE,
+                MediaStore.Audio.Media.ALBUM_ID,
                 MediaStore.Audio.Media.DATE_MODIFIED
         };
-        return PROJECTION;
     }
 }

@@ -22,22 +22,22 @@ import java.io.Serializable;
  * Created by Taurus on 2016/8/29.
  */
 public class BaseFolder implements Serializable {
-    private String id;
+    private long id;
     private String name;
 
     public BaseFolder() {
     }
 
-    public BaseFolder(String id, String name) {
+    public BaseFolder(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -47,5 +47,23 @@ public class BaseFolder implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseFolder that = (BaseFolder) o;
+
+        if (id != that.id) return false;
+        return name != null ? name.equals(that.name) : that.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

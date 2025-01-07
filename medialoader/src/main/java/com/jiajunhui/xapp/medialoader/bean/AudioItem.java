@@ -24,6 +24,8 @@ public class AudioItem extends BaseItem {
     private long duration;
     private boolean checked;
 
+    private long albumId;
+
     public long getDuration() {
         return duration;
     }
@@ -38,5 +40,13 @@ public class AudioItem extends BaseItem {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
     }
 }

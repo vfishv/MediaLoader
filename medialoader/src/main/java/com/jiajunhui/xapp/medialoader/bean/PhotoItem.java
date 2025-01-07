@@ -24,18 +24,20 @@ public class PhotoItem extends BaseItem {
 
     private boolean checked;
 
+    private long mini_thumb_magic;
+
     public PhotoItem() {
     }
 
-    public PhotoItem(int id, String displayName, String path) {
+    public PhotoItem(long id, String displayName, String path) {
         super(id, displayName, path);
     }
 
-    public PhotoItem(int id, String displayName, String path, long size) {
+    public PhotoItem(long id, String displayName, String path, long size) {
         super(id, displayName, path, size);
     }
 
-    public PhotoItem(int id, String displayName, String path, long size, long modified) {
+    public PhotoItem(long id, String displayName, String path, long size, long modified) {
         super(id, displayName, path, size, modified);
     }
 
@@ -45,5 +47,13 @@ public class PhotoItem extends BaseItem {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public long getMini_thumb_magic() {
+        return mini_thumb_magic;
+    }
+
+    public void setMini_thumb_magic(long mini_thumb_magic) {
+        this.mini_thumb_magic = mini_thumb_magic;
     }
 }

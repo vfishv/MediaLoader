@@ -1,5 +1,6 @@
 package com.jiajunhui.xapp.medialoader.callback;
 
+import android.os.Build;
 import android.provider.MediaStore;
 
 /**
@@ -22,7 +23,15 @@ public abstract class BaseLoaderCallBack<T> extends OnLoaderCallBack {
 
     @Override
     public String getSortOrderSql() {
-        return MediaStore.MediaColumns.DATE_MODIFIED + " DESC";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return MediaStore.MediaColumns.DATE_MODIFIED + " DESC" + " , " + MediaStore.Images.Media.DATE_TAKEN + " DESC";
+        } else {
+            return MediaStore.MediaColumns.DATE_MODIFIED + " DESC";
+        }
+    }
+
+    protected boolean supportR() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R;
     }
 
 }

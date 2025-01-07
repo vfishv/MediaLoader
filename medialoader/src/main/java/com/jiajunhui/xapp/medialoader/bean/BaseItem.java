@@ -22,24 +22,27 @@ import java.io.Serializable;
  * Created by Taurus on 16/8/28.
  */
 public class BaseItem implements Serializable {
-    private int id;
+    private long id;
     private String displayName;
     private String path;
+    private String mimeType;
     private long size;
     private long modified;
+    private boolean isTrashed;
+    private boolean isFavorite;
 
     public BaseItem() {
     }
 
-    public BaseItem(int id, String displayName, String path) {
+    public BaseItem(long id, String displayName, String path) {
         this(id, displayName, path, 0);
     }
 
-    public BaseItem(int id, String displayName, String path, long size) {
+    public BaseItem(long id, String displayName, String path, long size) {
         this(id, displayName, path, size, 0);
     }
 
-    public BaseItem(int id, String displayName, String path, long size, long modified) {
+    public BaseItem(long id, String displayName, String path, long size, long modified) {
         this.id = id;
         this.displayName = displayName;
         this.path = path;
@@ -47,11 +50,11 @@ public class BaseItem implements Serializable {
         this.modified = modified;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -71,6 +74,14 @@ public class BaseItem implements Serializable {
         this.path = path;
     }
 
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
     public long getSize() {
         return size;
     }
@@ -85,5 +96,21 @@ public class BaseItem implements Serializable {
 
     public void setModified(long modified) {
         this.modified = modified;
+    }
+
+    public boolean isTrashed() {
+        return isTrashed;
+    }
+
+    public void setTrashed(boolean trashed) {
+        isTrashed = trashed;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

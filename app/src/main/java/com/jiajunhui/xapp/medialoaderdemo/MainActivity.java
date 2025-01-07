@@ -1,12 +1,18 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +34,8 @@ import com.jiajunhui.xapp.medialoader.utils.TraversalSearchLoader;
 import java.io.File;
 import java.util.List;
 
-import kr.co.namee.permissiongen.PermissionFail;
-import kr.co.namee.permissiongen.PermissionGen;
-import kr.co.namee.permissiongen.PermissionSuccess;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +47,28 @@ public class MainActivity extends AppCompatActivity {
 
     private long start;
     private AsyncTask mTask;
+
+    public static boolean isFM() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        }
+        return false;
+    }
+
+    public static void requestStorageManager(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && context != null) {
+            Intent itt = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            itt.setData(Uri.parse("package:" + context.getPackageName()));
+            try {
+                context.startActivity(itt);
+            } catch (Exception e) {
+                e.printStackTrace();
+                itt = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                context.startActivity(itt);
+            }
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +89,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        PermissionGen.with(MainActivity.this)
-                .addRequestCode(100)
-                .permissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                .request();
+        EasyPermissions.requestPermissions(new PermissionRequest.Builder(this, 100, Manifest.permission.READ_EXTERNAL_STORAGE).build());
 
+        if (!isFM()) {
+            requestStorageManager(this);
+        }
     }
 
     private void recursionLoad() {
@@ -99,14 +125,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
+        boolean hasStorage = EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (requestCode == 100 && hasStorage) {
+            if (hasStorage) {
+                start = System.currentTimeMillis();
+                recursionLoad();
+                startLoad();
+            } else {
+                Toast.makeText(this, "permission deny", Toast.LENGTH_SHORT).show();
+            }
 
-    @PermissionSuccess(requestCode = 100)
-    public void onPermissionSuccess(){
-        start = System.currentTimeMillis();
-        recursionLoad();
-        startLoad();
+        }
     }
 
     private void startLoad() {
@@ -136,11 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 tv_file_info.setText(mInfos.toString());
             }
         });
-    }
-
-    @PermissionFail(requestCode = 100)
-    public void onPermissionFail(){
-        Toast.makeText(this, "permission deny", Toast.LENGTH_SHORT).show();
     }
 
     private void loadPhotos() {

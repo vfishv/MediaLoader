@@ -1,6 +1,7 @@
 package com.jiajunhui.xapp.medialoader.callback;
 
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import com.jiajunhui.xapp.medialoader.bean.FileProperty;
@@ -30,7 +31,13 @@ public abstract class BaseFileLoaderCallBack<T> extends BaseLoaderCallBack<T> {
 
     @Override
     public Uri getQueryUri() {
-        return MediaStore.Files.getContentUri(VOLUME_NAME);
+        Uri collection;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        } else {
+            collection = MediaStore.Files.getContentUri(VOLUME_NAME);
+        }
+        return collection;
     }
 
     @Override
@@ -42,12 +49,28 @@ public abstract class BaseFileLoaderCallBack<T> extends BaseLoaderCallBack<T> {
 
     @Override
     public String[] getSelectProjection() {
+        if (supportR()) {
         return new String[]{
                 MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.SIZE,
                 MediaStore.Files.FileColumns.DISPLAY_NAME,
                 MediaStore.Files.FileColumns.MIME_TYPE,
+//                MediaStore.Files.FileColumns.MEDIA_TYPE,
+//                MediaStore.Files.FileColumns.PARENT,
+                MediaStore.Files.FileColumns.DATE_MODIFIED,
+                MediaStore.Files.FileColumns.IS_TRASHED,
+                MediaStore.Files.FileColumns.IS_FAVORITE
+        };
+        }
+        return new String[]{
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.DATA,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.DISPLAY_NAME,
+                MediaStore.Files.FileColumns.MIME_TYPE,
+//                MediaStore.Files.FileColumns.MEDIA_TYPE,
+//                MediaStore.Files.FileColumns.PARENT,
                 MediaStore.Files.FileColumns.DATE_MODIFIED
         };
     }

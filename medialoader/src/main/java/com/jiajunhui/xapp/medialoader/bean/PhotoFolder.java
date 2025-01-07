@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class PhotoFolder extends BaseFolder{
     private String cover;
+    private long mini_thumb_magic;
     private List<PhotoItem> items = new ArrayList<>();
 
     public String getCover() {
@@ -48,43 +49,20 @@ public class PhotoFolder extends BaseFolder{
         items.add(item);
     }
 
+    public long getMini_thumb_magic() {
+        return mini_thumb_magic;
+    }
+
+    public void setMini_thumb_magic(long mini_thumb_magic) {
+        this.mini_thumb_magic = mini_thumb_magic;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PhotoFolder)) return false;
 
-        PhotoFolder directory = (PhotoFolder) o;
-
-        boolean hasId = !TextUtils.isEmpty(getId());
-        boolean otherHasId = !TextUtils.isEmpty(directory.getId());
-
-        if (hasId && otherHasId) {
-            if (!TextUtils.equals(getId(), directory.getId())) {
-                return false;
-            }
-
-            return TextUtils.equals(getName(), directory.getName());
-        }
-        return false;
+        return super.equals(o);
     }
 
-    @Override
-    public int hashCode() {
-        if (TextUtils.isEmpty(getId())) {
-            if (TextUtils.isEmpty(getName())) {
-                return 0;
-            }
-
-            return getName().hashCode();
-        }
-
-        int result = getId().hashCode();
-
-        if (TextUtils.isEmpty(getName())) {
-            return result;
-        }
-
-        result = 31 * result + getName().hashCode();
-        return result;
-    }
 }

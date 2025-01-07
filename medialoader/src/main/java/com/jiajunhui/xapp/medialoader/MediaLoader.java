@@ -1,15 +1,21 @@
 package com.jiajunhui.xapp.medialoader;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.Loader;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.callback.OnDownloadLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnFileLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
@@ -31,20 +37,20 @@ public class MediaLoader {
     private static final int DEFAULT_START_ID = 1000;
 
     private final String TAG = "MediaLoader";
-    private static MediaLoader loader = new MediaLoader();
+    private static final MediaLoader loader = new MediaLoader();
 
-    private Map<String,Queue<LoaderTask>> mTaskGroup = new HashMap<>();
+    private final Map<String,Queue<LoaderTask>> mTaskGroup = new HashMap<>();
 
-    private Map<String,Integer> mIds = new HashMap<>();
+    private final Map<String,Integer> mIds = new HashMap<>();
 
     private final int MSG_CODE_LOAD_FINISH = 101;
     private final int MSG_CODE_LOAD_START = 102;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case MSG_CODE_LOAD_FINISH:
                     Message message = Message.obtain();
                     message.what = MSG_CODE_LOAD_START;
@@ -53,33 +59,38 @@ public class MediaLoader {
                     break;
                 case MSG_CODE_LOAD_START:
                     String group = (String) msg.obj;
-                    if(!TextUtils.isEmpty(group)){
+                    if (!TextUtils.isEmpty(group)) {
                         Queue<LoaderTask> queue = mTaskGroup.get(group);
-                        LoaderTask task = queue.poll();
-                        if(task!=null){
-                            queueLoader(task.activity.get(),task.onLoaderCallBack);
+                        LoaderTask task = null;
+                        int queueSize = 0;
+                        if (queue != null) {
+                            task = queue.poll();
+                            queueSize = queue.size();
                         }
-                        Log.d(TAG,"after poll current group = " + group + " queue length = " + queue.size());
+                        if (task != null) {
+                            queueLoader(task.activity.get(), task.onLoaderCallBack);
+                        }
+                        Log.d(TAG, "after poll current group = " + group + " queue length = " + queueSize);
                     }
                     break;
             }
         }
     };
 
-    private MediaLoader(){
+    private MediaLoader() {
     }
 
-    public static MediaLoader getLoader(){
+    public static MediaLoader getLoader() {
         return loader;
     }
 
-    private int checkIds(FragmentActivity activity){
+    private int checkIds(FragmentActivity activity) {
         String name = activity.getClass().getName();
         int id;
-        if(!mIds.containsKey(name)){
+        if (!mIds.containsKey(name)) {
             id = DEFAULT_START_ID;
             mIds.put(name, id);
-        }else{
+        } else {
             int preId = mIds.get(name);
             preId++;
             mIds.put(name, preId);
@@ -89,21 +100,22 @@ public class MediaLoader {
     }
 
     private void loadMedia(FragmentActivity activity, AbsLoaderCallBack absLoaderCallBack){
-        activity.getSupportLoaderManager().restartLoader(checkIds(activity),null,absLoaderCallBack);
+        LoaderManager.getInstance(activity).restartLoader(checkIds(activity),null,absLoaderCallBack);
+        //activity.getSupportLoaderManager().restartLoader(checkIds(activity),null,absLoaderCallBack);
     }
 
-    private synchronized void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
+    private synchronized void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack) {
 
         String name = activity.getClass().getSimpleName();
         Queue<LoaderTask> queue = mTaskGroup.get(name);
-        LoaderTask task = new LoaderTask(new WeakReference<>(activity),onLoaderCallBack);
-        if(queue==null){
+        LoaderTask task = new LoaderTask(new WeakReference<>(activity), onLoaderCallBack);
+        if (queue == null) {
             queue = new LinkedList<>();
-            mTaskGroup.put(name,queue);
+            mTaskGroup.put(name, queue);
         }
         queue.offer(task);
-        Log.d(TAG,"after offer current queue group = " + name + " queue length = " + queue.size());
-        if(queue.size()==1){
+        Log.d(TAG, "after offer current queue group = " + name + " queue length = " + queue.size());
+        if (queue.size() == 1) {
             Message message = Message.obtain();
             message.what = MSG_CODE_LOAD_START;
             message.obj = name;
@@ -111,26 +123,26 @@ public class MediaLoader {
         }
     }
 
-    private void queueLoader(final FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
-        loadMedia(activity, new AbsLoaderCallBack(activity,onLoaderCallBack){
+    private void queueLoader(final FragmentActivity activity, OnLoaderCallBack onLoaderCallBack) {
+        loadMedia(activity, new AbsLoaderCallBack(activity, onLoaderCallBack) {
             @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
+            public void onLoaderReset(@NonNull Loader<Cursor> loader) {
                 super.onLoaderReset(loader);
                 Queue<LoaderTask> queue = mTaskGroup.get(activity.getClass().getSimpleName());
-                if(queue!=null){
+                if (queue != null) {
                     queue.clear();
                 }
-                Log.d(TAG,"***onLoaderReset***");
+                Log.d(TAG, "***onLoaderReset***");
             }
 
             @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
                 super.onLoadFinished(loader, data);
                 Message message = Message.obtain();
                 message.what = MSG_CODE_LOAD_FINISH;
                 message.obj = activity.getClass().getSimpleName();
                 mHandler.sendMessage(message);
-                Log.d(TAG,"***onLoaderFinished***");
+                Log.d(TAG, "***onLoaderFinished***");
             }
         });
     }
@@ -149,6 +161,11 @@ public class MediaLoader {
 
     public void loadFiles(FragmentActivity activity, OnFileLoaderCallBack onFileLoaderCallBack){
         load(activity,onFileLoaderCallBack);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void loadDownloads(FragmentActivity activity, OnDownloadLoaderCallBack onDownloadLoaderCallBack) {
+        load(activity, onDownloadLoaderCallBack);
     }
 
     public static class LoaderTask{

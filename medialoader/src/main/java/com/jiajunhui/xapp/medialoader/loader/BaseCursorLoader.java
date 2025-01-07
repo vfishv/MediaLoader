@@ -17,7 +17,7 @@
 package com.jiajunhui.xapp.medialoader.loader;
 
 import android.content.Context;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 
 import com.jiajunhui.xapp.medialoader.inter.ILoader;
 

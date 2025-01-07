@@ -70,10 +70,19 @@ public class UriGetPath {
                 Uri contentUri = null;
                 if ("image".equals(type)) {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentUri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+                    }
                 } else if ("video".equals(type)) {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+                    }
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentUri = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+                    }
                 }
 
                 final String selection = "_id=?";

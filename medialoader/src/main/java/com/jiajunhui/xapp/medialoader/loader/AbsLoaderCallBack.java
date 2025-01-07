@@ -19,9 +19,11 @@ package com.jiajunhui.xapp.medialoader.loader;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.callback.OnLoaderCallBack;
 
@@ -36,11 +38,12 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
     private OnLoaderCallBack onLoaderCallBack;
     private int mLoaderId;
 
-    public AbsLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack){
+    public AbsLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack) {
         this.context = new WeakReference<>(context);
         this.onLoaderCallBack = onLoaderCallBack;
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         mLoaderId = id;
@@ -48,26 +51,27 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         onLoaderCallBack.onLoadFinish(loader, data);
         destroyLoader();
     }
 
-    private void destroyLoader(){
+    private void destroyLoader() {
         try {
-            if(context!=null){
+            if (context != null) {
                 Context ctx = this.context.get();
-                if(ctx!=null){
-                    ((FragmentActivity)ctx).getSupportLoaderManager().destroyLoader(mLoaderId);
+                if (ctx != null) {
+                    LoaderManager.getInstance((FragmentActivity) ctx).destroyLoader(mLoaderId);
+                    //((FragmentActivity)ctx).getSupportLoaderManager().destroyLoader(mLoaderId);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         onLoaderCallBack.onLoaderReset();
     }
 
