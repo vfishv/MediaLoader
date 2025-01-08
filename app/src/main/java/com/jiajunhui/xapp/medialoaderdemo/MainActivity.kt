@@ -142,8 +142,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPhotos() {
         MediaLoader.getLoader().loadPhotos(this, object : OnPhotoLoaderCallBack() {
-            override fun onResult(result: PhotoResult) {
-                tv_photo_info!!.text = "图片: " + result.items.size + " 张"
+            override fun onResult(result: PhotoResult?) {
+                tv_photo_info!!.text = "图片: " + result?.items?.size + " 张"
             }
         })
     }
