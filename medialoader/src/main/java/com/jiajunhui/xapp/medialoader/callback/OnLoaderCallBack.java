@@ -1,6 +1,7 @@
 package com.jiajunhui.xapp.medialoader.callback;
 
 import android.database.Cursor;
+
 import androidx.loader.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.inter.ILoader;
@@ -13,7 +14,7 @@ public abstract class OnLoaderCallBack implements ILoader {
 
     public abstract void onLoadFinish(Loader<Cursor> loader, Cursor data);
 
-    public void onLoaderReset(){
+    public void onLoaderReset() {
     }
 
 }

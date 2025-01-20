@@ -34,7 +34,7 @@ public abstract class DownloadLoaderCallBack<T> extends BaseLoaderCallBack<T> {
     public Uri getQueryUri() {
         /*
         Uri collection;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (supportQ()) {
             collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL);
         } else {
             collection = MediaStore.Downloads.EXTERNAL_CONTENT_URI;

@@ -23,7 +23,7 @@ abstract class OnPhotoLoaderCallBack : BaseLoaderCallBack<PhotoResult?>() {
         }
         var folder: PhotoFolder
         var item: PhotoItem
-        var sum_size: Long = 0
+        var sum_size = 0L
         while (data != null && data.moveToNext()) {
             val folderId = data.getLong(data.getColumnIndexOrThrow(ImageColumns.BUCKET_ID))
             val folderName =
@@ -71,8 +71,10 @@ abstract class OnPhotoLoaderCallBack : BaseLoaderCallBack<PhotoResult?>() {
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.MINI_THUMB_MAGIC,
-                MediaStore.Images.Media.SIZE,  //                MediaStore.Images.Media.DESCRIPTION,
-                MediaStore.Images.Media.DATE_MODIFIED,  //                MediaStore.Images.Media.EXPOSURE_TIME,
+                MediaStore.Images.Media.SIZE,
+                //MediaStore.Images.Media.DESCRIPTION,
+                MediaStore.Images.Media.DATE_MODIFIED,
+                //MediaStore.Images.Media.EXPOSURE_TIME,
                 MediaStore.Images.Media.IS_TRASHED,
                 MediaStore.Images.Media.IS_FAVORITE
             )
@@ -85,18 +87,18 @@ abstract class OnPhotoLoaderCallBack : BaseLoaderCallBack<PhotoResult?>() {
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
             MediaStore.Images.Media.DISPLAY_NAME,
             MediaStore.Images.Media.MINI_THUMB_MAGIC,
-            MediaStore.Images.Media.SIZE,  //                MediaStore.Images.Media.DESCRIPTION,
+            MediaStore.Images.Media.SIZE,
+            //MediaStore.Images.Media.DESCRIPTION,
             MediaStore.Images.Media.DATE_MODIFIED
         )
     }
 
     override fun getQueryUri(): Uri {
-        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return if (supportQ()) {
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
-        return collection
-        //return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        //return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
     }
 }
