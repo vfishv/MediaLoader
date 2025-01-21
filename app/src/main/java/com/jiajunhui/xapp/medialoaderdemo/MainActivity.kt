@@ -117,22 +117,22 @@ class MainActivity : AppCompatActivity() {
         val mInfos = StringBuilder()
         MediaLoader.getLoader()
             .loadFiles(this@MainActivity, object : OnFileLoaderCallBack(FileType.DOC) {
-                override fun onResult(result: FileResult) {
-                    mInfos.append("doc file : " + result.items.size).append("\n")
+                override fun onResult(result: FileResult?) {
+                    mInfos.append("doc file : " + result?.items?.size).append("\n")
                 }
             })
 
         MediaLoader.getLoader()
             .loadFiles(this@MainActivity, object : OnFileLoaderCallBack(FileType.ZIP) {
-                override fun onResult(result: FileResult) {
-                    mInfos.append("zip file : " + result.items.size).append("\n")
+                override fun onResult(result: FileResult?) {
+                    mInfos.append("zip file : " + result?.items?.size).append("\n")
                 }
             })
 
         MediaLoader.getLoader()
             .loadFiles(this@MainActivity, object : OnFileLoaderCallBack(FileType.APK) {
-                override fun onResult(result: FileResult) {
-                    mInfos.append("apk file : " + result.items.size).append("\n")
+                override fun onResult(result: FileResult?) {
+                    mInfos.append("apk file : " + result?.items?.size).append("\n")
                     mInfos.append("consume time : " + (System.currentTimeMillis() - start))
                         .append("ms")
                     tv_file_info!!.text = mInfos.toString()
@@ -150,16 +150,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadAudios() {
         MediaLoader.getLoader().loadAudios(this, object : OnAudioLoaderCallBack() {
-            override fun onResult(result: AudioResult) {
-                tv_audio_info!!.text = "音乐: " + result.items.size + " 个"
+            override fun onResult(result: AudioResult?) {
+                tv_audio_info!!.text = "音乐: " + result?.items?.size + " 个"
             }
         })
     }
 
     private fun loadVideos() {
         MediaLoader.getLoader().loadVideos(this, object : OnVideoLoaderCallBack() {
-            override fun onResult(result: VideoResult) {
-                tv_video_info!!.text = "视频: " + result.items.size + " 个"
+            override fun onResult(result: VideoResult?) {
+                tv_video_info!!.text = "视频: " + result?.items?.size + " 个"
             }
         })
     }
